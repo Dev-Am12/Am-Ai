@@ -3,73 +3,92 @@ import { RefObject } from "react";
 import { PRICING_TIERS } from "@/lib/pricingConfig";
 import Icon from "./Icon";
 
-interface PricingCardProps {
-    tierId: string;
-    priceRef: React.RefObject<HTMLSpanElement | null>;
-    periodRef: React.RefObject<HTMLSpanElement | null>;
+interface Props {
+  tierId: string;
+  priceRef: RefObject<HTMLSpanElement | null>;
+  periodRef: RefObject<HTMLSpanElement | null>;
 }
 
-export default function PricingCard({ tierId, priceRef, periodRef }: PricingCardProps) {
-    const tier = PRICING_TIERS.find((t) => t.id === tierId)!;
+export default function PricingCard({ tierId, priceRef, periodRef }: Props) {
+  const tier = PRICING_TIERS.find((t) => t.id === tierId)!;
 
+  if (tier.highlighted) {
     return (
-        <article
-            className={`relative flex flex-col rounded-2xl p-8 border transition-transform duration-150 ease-out hover:-translate-y-1 ${tier.highlighted
-                ? "bg-forsythia border-forsythia/50"
-                : "bg-nocturnal border-nocturnal/60"
-                }`}
-            aria-label={`${tier.name} pricing plan`}
-        >
-            {tier.highlighted && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-oceanic text-forsythia font-mono text-xs font-bold px-3 py-1 rounded-full border border-forsythia/50 whitespace-nowrap">
-                    MOST POPULAR
-                </div>
-            )}
+      <article
+        style={{ position: "relative", display: "flex", flexDirection: "column", textAlign: "left", borderRadius: 16, padding: 32, border: "1px solid rgba(255,200,1,0.4)", overflow: "hidden", background: "linear-gradient(160deg, rgba(255,200,1,0.08) 0%, rgba(17,76,90,0.6) 100%)" }}
+        aria-label={`${tier.name} pricing plan`}
+      >
+        <div style={{ position: "absolute", inset: 0, borderRadius: 16, pointerEvents: "none", boxShadow: "0 0 60px rgba(255,200,1,0.08), inset 0 1px 0 rgba(255,200,1,0.2)" }} />
 
-            <header className="mb-6">
-                <h3 className={`font-mono font-bold text-2xl mb-1 ${tier.highlighted ? "text-oceanic" : "text-arctic"}`}>
-                    {tier.name}
-                </h3>
-                <p className={`font-sans text-sm ${tier.highlighted ? "text-oceanic/70" : "text-arctic/60"}`}>
-                    {tier.description}
-                </p>
-            </header>
+        <div style={{ position: "absolute", top: -12, left: 32 }}>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6, backgroundColor: "#FFC801", color: "#172B36", fontFamily: "var(--font-family-mono)", fontSize: 11, fontWeight: 700, padding: "4px 12px", borderRadius: 9999, boxShadow: "0 10px 15px -3px rgba(255,200,1,0.3)" }}>
+            <Icon name="arrow-trending-up" size={10} strokeColor="#172B36" /> MOST POPULAR
+          </span>
+        </div>
 
-            <div className="mb-6">
-                <div className="flex items-baseline gap-1">
-                    <span
-                        ref={priceRef}
-                        className={`font-mono font-bold text-4xl ${tier.highlighted ? "text-oceanic" : "text-forsythia"}`}
-                        aria-live="polite"
-                        aria-atomic="true"
-                    />
-                    <span
-                        ref={periodRef}
-                        className={`font-sans text-sm ${tier.highlighted ? "text-oceanic/70" : "text-arctic/50"}`}
-                    />
-                </div>
-                <p className={`font-sans text-xs mt-1 ${tier.highlighted ? "text-oceanic/60" : "text-arctic/40"}`}>
-                    Billed as described. Cancel anytime.
-                </p>
-            </div>
+        <header style={{ marginBottom: 24, marginTop: 8 }}>
+          <h3 className="font-mono" style={{ fontWeight: 700, fontSize: 24, color: "#F1F6F4", margin: "0 0 4px 0" }}>{tier.name}</h3>
+          <p className="font-sans" style={{ fontSize: 14, color: "rgba(241,246,244,0.55)", margin: 0 }}>{tier.description}</p>
+        </header>
 
-            <ul className="flex flex-col gap-2 mb-8 flex-grow" aria-label={`${tier.name} plan features`}>
-                {tier.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2 font-sans text-sm">
-                        <Icon name="chevron-right" size={14} strokeColor={tier.highlighted ? "#172B36" : "#FFC801"} />
-                        <span className={tier.highlighted ? "text-oceanic/90" : "text-arctic/80"}>{feature}</span>
-                    </li>
-                ))}
-            </ul>
+        <div style={{ marginBottom: 24 }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
+            <span ref={priceRef} className="font-mono" style={{ fontWeight: 700, fontSize: 48, color: "#FFC801", fontVariantNumeric: "tabular-nums" }} aria-live="polite" aria-atomic="true" />
+            <span ref={periodRef} className="font-sans" style={{ fontSize: 14, color: "rgba(241,246,244,0.4)" }} />
+          </div>
+          <p className="font-sans" style={{ fontSize: 12, color: "rgba(241,246,244,0.3)", margin: "4px 0 0 0" }}>Cancel anytime. No setup fees.</p>
+        </div>
 
-            <button
-                className={`w-full py-3 rounded-lg font-semibold font-sans text-sm transition-colors duration-150 ease-out min-h-[44px] ${tier.highlighted
-                    ? "bg-oceanic text-forsythia hover:bg-nocturnal"
-                    : "bg-forsythia/10 text-forsythia border border-forsythia/30 hover:bg-forsythia hover:text-oceanic"
-                    }`}
-            >
-                Get Started with {tier.name}
-            </button>
-        </article>
+        <ul style={{ display: "flex", flexDirection: "column", gap: 10, margin: "0 0 32px 0", flexGrow: 1, listStyle: "none", padding: 0 }}>
+          {tier.features.map((f) => (
+            <li key={f} style={{ display: "flex", alignItems: "center", gap: 10, fontFamily: "var(--font-family-sans)", fontSize: 14, color: "rgba(241,246,244,0.8)" }}>
+              <div style={{ width: 16, height: 16, borderRadius: "50%", backgroundColor: "rgba(255,200,1,0.2)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <Icon name="chevron-right" size={10} strokeColor="#FFC801" />
+              </div>
+              {f}
+            </li>
+          ))}
+        </ul>
+
+        <button style={{ width: "100%", padding: "14px 0", borderRadius: 12, fontWeight: 600, fontFamily: "var(--font-family-sans)", fontSize: 14, backgroundColor: "#FFC801", color: "#172B36", border: "none", cursor: "pointer", boxShadow: "0 10px 15px -3px rgba(255,200,1,0.25)", minHeight: 44, transition: "background-color 150ms" }} onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#FF9932")} onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#FFC801")}>
+          {tier.cta}
+        </button>
+      </article>
     );
+  }
+
+  return (
+    <article
+      style={{ position: "relative", display: "flex", flexDirection: "column", textAlign: "left", borderRadius: 16, padding: 32, border: "1px solid rgba(255,255,255,0.08)", overflow: "hidden", background: "linear-gradient(160deg, rgba(17,76,90,0.35) 0%, rgba(23,43,54,0.7) 100%)", transition: "all 200ms" }}
+      aria-label={`${tier.name} pricing plan`}
+      onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,200,1,0.12)"; e.currentTarget.style.borderColor = "rgba(255,200,1,0.22)"; }}
+      onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; }}
+    >
+      <header style={{ marginBottom: 24 }}>
+        <h3 className="font-mono" style={{ fontWeight: 700, fontSize: 24, color: "#F1F6F4", margin: "0 0 4px 0" }}>{tier.name}</h3>
+        <p className="font-sans" style={{ fontSize: 14, color: "rgba(241,246,244,0.5)", margin: 0 }}>{tier.description}</p>
+      </header>
+
+      <div style={{ marginBottom: 24 }}>
+        <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
+          <span ref={priceRef} className="font-mono" style={{ fontWeight: 700, fontSize: 48, color: "#F1F6F4", fontVariantNumeric: "tabular-nums" }} aria-live="polite" aria-atomic="true" />
+          <span ref={periodRef} className="font-sans" style={{ fontSize: 14, color: "rgba(241,246,244,0.4)" }} />
+        </div>
+        <p className="font-sans" style={{ fontSize: 12, color: "rgba(241,246,244,0.3)", margin: "4px 0 0 0" }}>Cancel anytime. No setup fees.</p>
+      </div>
+
+      <ul style={{ display: "flex", flexDirection: "column", gap: 10, margin: "0 0 32px 0", flexGrow: 1, listStyle: "none", padding: 0 }}>
+        {tier.features.map((f) => (
+          <li key={f} style={{ display: "flex", alignItems: "center", gap: 10, fontFamily: "var(--font-family-sans)", fontSize: 14, color: "rgba(241,246,244,0.65)" }}>
+            <Icon name="chevron-right" size={14} strokeColor="#FFC801" className="shrink-0" />
+            {f}
+          </li>
+        ))}
+      </ul>
+
+      <button style={{ width: "100%", padding: "14px 0", borderRadius: 12, fontWeight: 600, fontFamily: "var(--font-family-sans)", fontSize: 14, backgroundColor: "transparent", color: "rgba(241,246,244,0.8)", border: "1px solid rgba(255,255,255,0.15)", cursor: "pointer", minHeight: 44, transition: "all 150ms" }} onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(255,200,1,0.4)"; e.currentTarget.style.color = "#FFC801"; e.currentTarget.style.backgroundColor = "rgba(255,200,1,0.05)"; }} onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)"; e.currentTarget.style.color = "rgba(241,246,244,0.8)"; e.currentTarget.style.backgroundColor = "transparent"; }}>
+        {tier.cta}
+      </button>
+    </article>
+  );
 }

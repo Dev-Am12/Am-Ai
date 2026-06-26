@@ -1,61 +1,59 @@
+"use client";
 import Icon from "./Icon";
 
+const links = {
+  Product: ["Features", "Pricing", "Changelog", "Roadmap", "Status"],
+  Developers: ["Docs", "API Reference", "SDKs", "Webhooks", "CLI"],
+  Company: ["About", "Blog", "Careers", "Press", "Legal"],
+};
+
 export default function Footer() {
-    const productLinks = ["Features", "Pricing", "Changelog", "Roadmap"];
-    const companyLinks = ["About", "Blog", "Careers", "Contact"];
-
-    return (
-        <footer className="bg-oceanic border-t border-nocturnal pt-16 pb-8">
-            <div className="max-w-7xl mx-auto px-6">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                    {/* Brand */}
-                    <div>
-                        <p className="font-mono font-bold text-xl text-forsythia mb-3">NeuralFlow</p>
-                        <p className="font-sans text-arctic/60 text-sm leading-relaxed mb-6">
-                            Automating the future of data, one pipeline at a time.
-                        </p>
-                        <div className="flex gap-4">
-                            {["Twitter", "GitHub", "LinkedIn"].map((s) => (
-                                <a key={s} href="#" className="flex items-center gap-1 font-sans text-arctic/50 hover:text-forsythia text-xs transition-colors duration-150">
-                                    <Icon name="chevron-right" size={12} strokeColor="currentColor" />
-                                    {s}
-                                </a>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Product */}
-                    <div>
-                        <p className="font-sans font-semibold text-arctic text-xs uppercase tracking-widest mb-4">Product</p>
-                        <ul className="flex flex-col gap-2.5">
-                            {productLinks.map((l) => (
-                                <li key={l} className="flex items-center gap-1.5">
-                                    <Icon name="chevron-right" size={12} strokeColor="#FFC801" />
-                                    <a href="#" className="font-sans text-arctic/60 hover:text-forsythia text-sm transition-colors duration-150">{l}</a>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Company */}
-                    <div>
-                        <p className="font-sans font-semibold text-arctic text-xs uppercase tracking-widest mb-4">Company</p>
-                        <ul className="flex flex-col gap-2.5">
-                            {companyLinks.map((l) => (
-                                <li key={l} className="flex items-center gap-1.5">
-                                    <Icon name="chevron-right" size={12} strokeColor="#FFC801" />
-                                    <a href="#" className="font-sans text-arctic/60 hover:text-forsythia text-sm transition-colors duration-150">{l}</a>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
-
-                <div className="border-t border-nocturnal mt-12 pt-8 flex flex-col sm:flex-row justify-between gap-2">
-                    <p className="font-sans text-arctic/40 text-sm">© 2026 NeuralFlow. All rights reserved.</p>
-                    <p className="font-sans text-arctic/40 text-sm">Built for the Next-Gen AI Hackathon</p>
-                </div>
+  return (
+    <footer style={{ position: "relative", backgroundColor: "#172B36", borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: 64, paddingBottom: 40 }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 40, marginBottom: 56 }}>
+          {/* Brand col */}
+          <div style={{ gridColumn: "span 2" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+              <Icon name="amai-logo" size={28} strokeColor="#FFC801" />
+              <span className="font-mono" style={{ fontWeight: 700, color: "#FFC801", fontSize: 16 }}>AmAi</span>
             </div>
-        </footer>
-    );
+            <p className="font-sans" style={{ color: "rgba(241,246,244,0.45)", fontSize: 14, lineHeight: 1.6, marginBottom: 20, maxWidth: 300 }}>
+              The AI-native data automation platform for modern engineering teams.
+            </p>
+            <div style={{ display: "flex", gap: 8 }}>
+              {["Twitter", "GitHub", "LinkedIn"].map((s) => (
+                <a key={s} href="#" style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 32, height: 32, borderRadius: 8, border: "1px solid rgba(255,255,255,0.08)", color: "rgba(241,246,244,0.4)", textDecoration: "none", fontFamily: "var(--font-family-mono)", fontSize: 10, transition: "all 150ms" }} onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(241,246,244,0.8)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)"; }} onMouseLeave={(e) => { e.currentTarget.style.color = "rgba(241,246,244,0.4)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; }}>
+                  {s[0]}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Links */}
+          {Object.entries(links).map(([group, items]) => (
+            <div key={group}>
+              <p className="font-mono" style={{ color: "rgba(241,246,244,0.5)", fontSize: 12, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 16 }}>{group}</p>
+              <ul style={{ display: "flex", flexDirection: "column", gap: 10, listStyle: "none", padding: 0 }}>
+                {items.map((item) => (
+                  <li key={item}>
+                    <a href="#" className="font-sans" style={{ fontSize: 14, color: "rgba(241,246,244,0.45)", textDecoration: "none", transition: "color 150ms" }} onMouseEnter={(e) => e.currentTarget.style.color = "rgba(241,246,244,0.8)"} onMouseLeave={(e) => e.currentTarget.style.color = "rgba(241,246,244,0.45)"}>{item}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom bar */}
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: 28, display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
+          <p className="font-sans" style={{ color: "rgba(241,246,244,0.3)", fontSize: 12 }}>© 2026 AmAi Technologies. All rights reserved.</p>
+          <div className="font-mono" style={{ display: "flex", alignItems: "center", gap: 4, color: "rgba(241,246,244,0.2)", fontSize: 12 }}>
+            <Icon name="cog-8-tooth" size={11} strokeColor="rgba(255,200,1,0.3)" />
+            Built for the Next-Gen AI Hackathon
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
 }
