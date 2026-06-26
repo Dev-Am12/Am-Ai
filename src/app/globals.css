@@ -1,0 +1,52 @@
+@import "tailwindcss";
+@source "../components";
+@source "../app"; 
+
+@theme {
+  --color-forsythia: #FFC801;
+  --color-deep-saffron: #FF9932;
+  --color-nocturnal: #114C5A;
+  --color-oceanic: #172B36;
+  --color-arctic: #F1F6F4;
+  --color-mystic-mint: #D9E8E2;
+
+  --font-mono: var(--font-jetbrains), monospace;
+  --font-sans: var(--font-inter), sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-oceanic);
+  color: var(--color-arctic);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes meshShift {
+  0%   { transform: translate(0, 0); }
+  50%  { transform: translate(30px, -20px); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes badgeIn {
+  from { opacity: 0; transform: scale(0.7); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.animate-badge-in {
+  animation: badgeIn 200ms ease-out forwards;
+}
