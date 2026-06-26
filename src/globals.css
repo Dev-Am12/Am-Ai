@@ -1,6 +1,4 @@
 @import "tailwindcss";
-@source "../components";
-@source "../app"; 
 
 @theme {
   --color-forsythia: #FFC801;

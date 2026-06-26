@@ -5,8 +5,8 @@ import Icon from "./Icon";
 
 interface PricingCardProps {
     tierId: string;
-    priceRef: RefObject<HTMLSpanElement>;
-    periodRef: RefObject<HTMLSpanElement>;
+    priceRef: React.RefObject<HTMLSpanElement | null>;
+    periodRef: React.RefObject<HTMLSpanElement | null>;
 }
 
 export default function PricingCard({ tierId, priceRef, periodRef }: PricingCardProps) {
@@ -15,8 +15,8 @@ export default function PricingCard({ tierId, priceRef, periodRef }: PricingCard
     return (
         <article
             className={`relative flex flex-col rounded-2xl p-8 border transition-transform duration-150 ease-out hover:-translate-y-1 ${tier.highlighted
-                    ? "bg-forsythia border-forsythia/50"
-                    : "bg-nocturnal border-nocturnal/60"
+                ? "bg-forsythia border-forsythia/50"
+                : "bg-nocturnal border-nocturnal/60"
                 }`}
             aria-label={`${tier.name} pricing plan`}
         >
@@ -64,8 +64,8 @@ export default function PricingCard({ tierId, priceRef, periodRef }: PricingCard
 
             <button
                 className={`w-full py-3 rounded-lg font-semibold font-sans text-sm transition-colors duration-150 ease-out min-h-[44px] ${tier.highlighted
-                        ? "bg-oceanic text-forsythia hover:bg-nocturnal"
-                        : "bg-forsythia/10 text-forsythia border border-forsythia/30 hover:bg-forsythia hover:text-oceanic"
+                    ? "bg-oceanic text-forsythia hover:bg-nocturnal"
+                    : "bg-forsythia/10 text-forsythia border border-forsythia/30 hover:bg-forsythia hover:text-oceanic"
                     }`}
             >
                 Get Started with {tier.name}
