@@ -62,8 +62,8 @@ export default function Navbar() {
             boxShadow: "0 2px 12px rgba(255,200,1,0.22)",
             transition: "background 150ms",
           }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#FF9932"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "#FFC801"; }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#FF9932"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "#FFC801"; }}
           >
             Get Started <Icon name="chevron-right" size={13} strokeColor="#172B36" />
           </a>
@@ -80,10 +80,10 @@ export default function Navbar() {
           {menuOpen
             ? <Icon name="x-mark" size={22} strokeColor="#F1F6F4" />
             : <div style={{ display: "flex", flexDirection: "column", gap: 5, width: 20 }}>
-              <span style={{ height: 1.5, background: "rgba(241,246,244,0.7)", borderRadius: 2, display: "block" }} />
-              <span style={{ height: 1.5, background: "rgba(241,246,244,0.7)", borderRadius: 2, display: "block", width: "75%" }} />
-              <span style={{ height: 1.5, background: "rgba(241,246,244,0.7)", borderRadius: 2, display: "block" }} />
-            </div>
+                <span style={{ height: 1.5, background: "rgba(241,246,244,0.7)", borderRadius: 2, display: "block" }} />
+                <span style={{ height: 1.5, background: "rgba(241,246,244,0.7)", borderRadius: 2, display: "block", width: "75%" }} />
+                <span style={{ height: 1.5, background: "rgba(241,246,244,0.7)", borderRadius: 2, display: "block" }} />
+              </div>
           }
         </button>
       </nav>

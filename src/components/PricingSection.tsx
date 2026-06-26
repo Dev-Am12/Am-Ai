@@ -20,6 +20,7 @@ export default function PricingSection() {
     enterprise: useRef<HTMLSpanElement>(null),
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const updatePrices = useCallback((cur: Currency, cycle: BillingCycle) => {
     PRICING_TIERS.forEach((tier) => {
       const k = tier.id as keyof typeof priceRefs;
@@ -36,41 +37,34 @@ export default function PricingSection() {
   const handleBilling  = (cyc: BillingCycle) => { setBillingCycle(cyc); updatePrices(currency, cyc); };
 
   return (
-    <section id="pricing" aria-labelledby="pricing-heading" style={{ position: "relative", padding: "112px 0", overflow: "hidden" }}>
-      <style>{`
-        .pricing-controls { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; margin-bottom: 56px; }
-        .pricing-grid { display: flex; flex-direction: column; gap: 20px; max-width: 1024px; margin: 0 auto; }
-        @media (min-width: 640px) { .pricing-controls { flex-direction: row; } }
-        @media (min-width: 768px) { .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); } }
-      `}</style>
+    <section id="pricing" aria-labelledby="pricing-heading" className="relative py-28 overflow-hidden">
+      {/* Light section background — Stripe contrast flip */}
+      <div className="absolute inset-0 bg-arctic" />
+      <div className="absolute inset-0 opacity-[0.025]"
+        style={{ backgroundImage: "radial-gradient(circle, rgba(23,43,54,1) 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
 
-      {/* Light section background */}
-      <div style={{ position: "absolute", inset: 0, backgroundColor: "#F1F6F4" }} />
-      <div style={{ position: "absolute", inset: 0, opacity: 0.025, backgroundImage: "radial-gradient(circle, rgba(23,43,54,1) 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
-
-      <div style={{ position: "relative", zIndex: 10, maxWidth: 1280, margin: "0 auto", padding: "0 24px" }}>
-        
-        {/* Header - Fixed Centering */}
-        <div style={{ textAlign: "center", marginBottom: 56, maxWidth: 672, margin: "0 auto 56px auto" }}>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "4px 12px", borderRadius: 9999, border: "1px solid rgba(17,76,90,0.2)", backgroundColor: "rgba(17,76,90,0.08)", marginBottom: 20 }}>
-            <span className="font-mono" style={{ color: "rgba(17,76,90,0.7)", fontSize: 12, textTransform: "uppercase", letterSpacing: "0.1em" }}>Simple Pricing</span>
+      <div className="relative z-10 max-w-7xl mx-auto px-6">
+        {/* Header */}
+        <div className="text-center mb-14 max-w-2xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-nocturnal/20 bg-nocturnal/8 mb-5">
+            <span className="font-mono text-nocturnal/70 text-xs uppercase tracking-widest">Simple Pricing</span>
           </div>
-          <h2 id="pricing-heading" className="font-mono" style={{ fontWeight: 700, fontSize: "clamp(36px, 5vw, 48px)", color: "#172B36", lineHeight: 1.2, margin: 0 }}>
+          <h2 id="pricing-heading" className="font-mono font-bold text-4xl md:text-5xl text-oceanic leading-tight">
             Transparent. Scalable.<br />No surprises.
           </h2>
-          <p className="font-sans" style={{ color: "rgba(23,43,54,0.55)", marginTop: 16, lineHeight: 1.6, margin: "16px 0 0 0" }}>
+          <p className="font-sans text-oceanic/55 mt-4 leading-relaxed">
             Start free, scale as you grow. Every plan includes a 14-day trial — no card required.
           </p>
         </div>
 
         {/* Controls */}
-        <div className="pricing-controls">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-14">
           <BillingToggle value={billingCycle} onChange={handleBilling} />
           <CurrencySwitcher value={currency} onChange={handleCurrency} />
         </div>
 
         {/* Cards */}
-        <div className="pricing-grid">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto">
           {PRICING_TIERS.map((t) => (
             <PricingCard
               key={t.id}
@@ -81,7 +75,7 @@ export default function PricingSection() {
           ))}
         </div>
 
-        <p className="font-sans" style={{ color: "rgba(23,43,54,0.35)", textAlign: "center", fontSize: 12, marginTop: 40, margin: "40px auto 0 auto" }}>
+        <p className="font-sans text-oceanic/35 text-center text-xs mt-10">
           All prices exclude applicable taxes. Enterprise plans available with custom invoicing.
         </p>
       </div>

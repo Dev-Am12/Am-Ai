@@ -3,9 +3,9 @@ import { useRef, useEffect } from "react";
 import Icon from "./Icon";
 
 const testimonials = [
-  { quote: "AmAi cut our ETL pipeline build time from 3 weeks to 2 days. The visual builder is genuinely a step change.", author: "Priya Mehta", role: "Head of Data Engineering", company: "FinStack" },
-  { quote: "We handle 40 million events per day and AmAi has never missed a beat. The 99.99% SLA is not marketing — it's real.", author: "James O'Connor", role: "VP of Infrastructure", company: "Tradeflo" },
-  { quote: "Migrated from Airflow in a weekend. The smart sync engine alone is worth the price of admission.", author: "Ananya Krishnan", role: "CTO", company: "DataNest" },
+  { quote: "AmAi cut our ETL pipeline build time from 3 weeks to 2 days. The visual builder is genuinely a step change for every data engineer on our team.", author: "Priya Mehta", role: "Head of Data Engineering", company: "FinStack", initial: "P" },
+  { quote: "We handle 40 million events per day and AmAi has never missed a beat. The 99.99% SLA is not marketing copy — it's real, and it shows.", author: "James O'Connor", role: "VP of Infrastructure", company: "Tradeflo", initial: "J" },
+  { quote: "Migrated off Airflow in a weekend. The smart sync engine and the fact that it just works with our existing Snowflake setup sealed the deal.", author: "Ananya Krishnan", role: "CTO", company: "DataNest", initial: "A" },
 ];
 
 export default function TestimonialsSection() {
@@ -14,56 +14,65 @@ export default function TestimonialsSection() {
   useEffect(() => {
     const el = gridRef.current;
     if (!el) return;
+    el.style.opacity = "0";
     const obs = new IntersectionObserver(([e]) => {
       if (!e.isIntersecting) return;
       obs.disconnect();
-      el.animate(
-        [{ opacity: "0", transform: "translateY(30px)" }, { opacity: "1", transform: "translateY(0)" }],
-        { duration: 600, easing: "ease-out", fill: "forwards" }
-      );
+      el.animate([{ opacity: "0", transform: "translateY(28px)" }, { opacity: "1", transform: "translateY(0)" }], { duration: 600, easing: "ease-out", fill: "forwards" });
     }, { threshold: 0.1 });
-    el.style.opacity = "0";
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
 
   return (
-    <section id="testimonials" aria-labelledby="testimonials-heading" style={{ position: "relative", padding: "112px 0", overflow: "hidden" }}>
-      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, #172B36, #0f1f2a, #172B36)" }} />
-      <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 600, height: 300, borderRadius: "50%", pointerEvents: "none", background: "radial-gradient(ellipse, rgba(255,200,1,0.04) 0%, transparent 70%)", filter: "blur(40px)" }} />
+    <section id="testimonials" aria-labelledby="testimonials-heading" style={{ position: "relative", padding: "104px 0", overflow: "hidden" }}>
+      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, #172B36 0%, #0f1f2a 50%, #172B36 100%)" }} />
+      <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 600, height: 300, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(255,200,1,0.04) 0%, transparent 70%)", filter: "blur(40px)", pointerEvents: "none" }} />
 
-      <div style={{ position: "relative", zIndex: 10, maxWidth: 1280, margin: "0 auto", padding: "0 24px" }}>
-        <div style={{ textAlign: "center", marginBottom: 64 }}>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "4px 12px", borderRadius: 9999, border: "1px solid rgba(255,200,1,0.2)", backgroundColor: "rgba(255,200,1,0.08)", marginBottom: 20 }}>
-            <span className="font-mono" style={{ color: "#FFC801", fontSize: 12, textTransform: "uppercase", letterSpacing: "0.1em" }}>Customer Stories</span>
-          </div>
-          <h2 id="testimonials-heading" className="font-mono" style={{ fontWeight: 700, fontSize: "clamp(36px, 5vw, 48px)", color: "#F1F6F4" }}>
+      <div style={{ position: "relative", zIndex: 1, maxWidth: 1280, margin: "0 auto", padding: "0 24px" }}>
+        <div style={{ marginBottom: 52, maxWidth: 540 }}>
+          <p className="font-mono" style={{ fontSize: 12, color: "rgba(255,200,1,0.7)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 14 }}>Customer Stories</p>
+          <h2 id="testimonials-heading" className="font-mono" style={{ fontWeight: 700, fontSize: "clamp(28px, 4vw, 46px)", lineHeight: 1.1, letterSpacing: "-0.02em", color: "#F1F6F4" }}>
             Don&apos;t take our word for it.
           </h2>
         </div>
 
-        <div ref={gridRef} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 20 }}>
+        <div ref={gridRef} style={{ display: "grid", gridTemplateColumns: "repeat(1, 1fr)", gap: 14 }} className="md:grid-cols-3">
           {testimonials.map((t, i) => (
-            <figure key={i}
-              className="card-hover"
-              style={{ position: "relative", display: "flex", flexDirection: "column", borderRadius: 16, padding: 28, border: "1px solid rgba(255,255,255,0.08)", overflow: "hidden", background: "linear-gradient(160deg, rgba(17,76,90,0.35), rgba(23,43,54,0.7))", transition: "all 200ms" }}
+            <figure
+              key={i}
+              className="glow-card"
+              onMouseMove={(e) => {
+                const el = e.currentTarget as HTMLElement;
+                const rect = el.getBoundingClientRect();
+                el.style.setProperty("--mouse-x", `${((e.clientX - rect.left) / rect.width) * 100}%`);
+                el.style.setProperty("--mouse-y", `${((e.clientY - rect.top) / rect.height) * 100}%`);
+              }}
+              style={{
+                borderRadius: 16, padding: "26px 24px",
+                border: "1px solid rgba(255,255,255,0.08)",
+                background: "linear-gradient(145deg, rgba(17,76,90,0.38), rgba(23,43,54,0.7))",
+                display: "flex", flexDirection: "column", overflow: "hidden", position: "relative",
+                transition: "transform 160ms ease-out, box-shadow 160ms ease-out, border-color 160ms ease-out",
+              }}
+              onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(-4px)"; el.style.boxShadow = "0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,200,1,0.1)"; el.style.borderColor = "rgba(255,200,1,0.2)"; }}
+              onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(0)"; el.style.boxShadow = "none"; el.style.borderColor = "rgba(255,255,255,0.08)"; }}
             >
-              <div style={{ marginBottom: 20 }}>
-                <Icon name="link-solid" size={20} strokeColor="#FFC801" className="opacity-60" />
+              <div style={{ marginBottom: 18, opacity: 0.55 }}>
+                <Icon name="link-solid" size={18} strokeColor="#FFC801" />
               </div>
-              <blockquote style={{ flexGrow: 1, margin: 0 }}>
-                <p className="font-sans" style={{ color: "rgba(241,246,244,0.75)", fontSize: 14, lineHeight: 1.6 }}>&ldquo;{t.quote}&rdquo;</p>
+              <blockquote style={{ flex: 1 }}>
+                <p className="font-sans" style={{ fontSize: 14, color: "rgba(241,246,244,0.72)", lineHeight: 1.7 }}>&ldquo;{t.quote}&rdquo;</p>
               </blockquote>
-              <figcaption style={{ marginTop: 24, paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", gap: 12 }}>
-                <div style={{ width: 32, height: 32, borderRadius: "50%", background: "linear-gradient(to bottom right, rgba(255,200,1,0.4), #114C5A)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <span className="font-mono" style={{ fontSize: 12, fontWeight: 700, color: "#FFC801" }}>{t.author[0]}</span>
+              <figcaption style={{ marginTop: 22, paddingTop: 18, borderTop: "1px solid rgba(255,255,255,0.07)", display: "flex", alignItems: "center", gap: 11 }}>
+                <div style={{ width: 34, height: 34, borderRadius: "50%", background: "linear-gradient(135deg, rgba(255,200,1,0.4), rgba(17,76,90,0.8))", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <span className="font-mono" style={{ fontSize: 12, fontWeight: 700, color: "#FFC801" }}>{t.initial}</span>
                 </div>
                 <div>
-                  <p className="font-mono" style={{ fontWeight: 600, color: "#F1F6F4", fontSize: 14, lineHeight: 1.2 }}>{t.author}</p>
-                  <p className="font-sans" style={{ color: "rgba(241,246,244,0.45)", fontSize: 12, marginTop: 2 }}>{t.role}, {t.company}</p>
+                  <p className="font-mono" style={{ fontSize: 13, fontWeight: 600, color: "#F1F6F4", lineHeight: 1.3 }}>{t.author}</p>
+                  <p className="font-sans" style={{ fontSize: 11, color: "rgba(241,246,244,0.4)", marginTop: 2 }}>{t.role}, {t.company}</p>
                 </div>
               </figcaption>
-              <div style={{ position: "absolute", bottom: -16, right: -16, width: 80, height: 80, borderRadius: "50%", pointerEvents: "none", background: "radial-gradient(circle, rgba(255,200,1,0.06), transparent)" }} />
             </figure>
           ))}
         </div>
