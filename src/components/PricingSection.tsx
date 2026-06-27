@@ -2,80 +2,129 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { PRICING_TIERS, computePrice, type Currency, type BillingCycle } from "@/lib/pricingConfig";
 import PricingCard from "./PricingCard";
-import BillingToggle from "./BillingToggle";
-import CurrencySwitcher from "./CurrencySwitcher";
 
 export default function PricingSection() {
-  const [currency, setCurrency] = useState<Currency>("INR");
+  const [currency, setCurrency]       = useState<Currency>("INR");
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("monthly");
+  const [desktop, setDesktop]          = useState(false);
 
-  const priceRefs = {
-    starter:    useRef<HTMLSpanElement>(null),
-    pro:        useRef<HTMLSpanElement>(null),
-    enterprise: useRef<HTMLSpanElement>(null),
-  };
-  const periodRefs = {
-    starter:    useRef<HTMLSpanElement>(null),
-    pro:        useRef<HTMLSpanElement>(null),
-    enterprise: useRef<HTMLSpanElement>(null),
-  };
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const set = (e: MediaQueryListEvent | MediaQueryList) => setDesktop(e.matches);
+    set(mq); mq.addEventListener("change", set);
+    return () => mq.removeEventListener("change", set);
+  }, []);
+
+  const priceRefs  = { starter: useRef<HTMLSpanElement>(null), pro: useRef<HTMLSpanElement>(null), enterprise: useRef<HTMLSpanElement>(null) };
+  const periodRefs = { starter: useRef<HTMLSpanElement>(null), pro: useRef<HTMLSpanElement>(null), enterprise: useRef<HTMLSpanElement>(null) };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const updatePrices = useCallback((cur: Currency, cycle: BillingCycle) => {
     PRICING_TIERS.forEach((tier) => {
       const k = tier.id as keyof typeof priceRefs;
-      const pEl = priceRefs[k].current;
-      const perEl = periodRefs[k].current;
-      if (pEl) pEl.textContent = computePrice(tier.id, cur, cycle);
+      const pEl = priceRefs[k].current; const perEl = periodRefs[k].current;
+      if (pEl)   pEl.textContent  = computePrice(tier.id, cur, cycle);
       if (perEl) perEl.textContent = cycle === "monthly" ? "/ mo" : "/ yr";
     });
   }, []);
 
   useEffect(() => { updatePrices("INR", "monthly"); }, [updatePrices]);
 
-  const handleCurrency = (cur: Currency) => { setCurrency(cur); updatePrices(cur, billingCycle); };
-  const handleBilling  = (cyc: BillingCycle) => { setBillingCycle(cyc); updatePrices(currency, cyc); };
+  const handleCurrency = (cur: Currency)       => { setCurrency(cur);       updatePrices(cur, billingCycle); };
+  const handleBilling  = (cyc: BillingCycle)   => { setBillingCycle(cyc);   updatePrices(currency, cyc); };
 
   return (
-    <section id="pricing" aria-labelledby="pricing-heading" className="relative py-28 overflow-hidden">
-      {/* Light section background — Stripe contrast flip */}
-      <div className="absolute inset-0 bg-arctic" />
-      <div className="absolute inset-0 opacity-[0.025]"
-        style={{ backgroundImage: "radial-gradient(circle, rgba(23,43,54,1) 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
+    <section id="pricing" aria-labelledby="pricing-heading"
+      style={{ position: "relative", padding: "108px 0", overflow: "hidden" }}>
+      {/* Keep dark theme for pricing — no light section flip */}
+      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, #0f2028 0%, #172B36 100%)" }} />
+      <div style={{ position: "absolute", inset: 0, opacity: 0.025, backgroundImage: "radial-gradient(circle, rgba(241,246,244,0.7) 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6">
-        {/* Header */}
-        <div className="text-center mb-14 max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-nocturnal/20 bg-nocturnal/8 mb-5">
-            <span className="font-mono text-nocturnal/70 text-xs uppercase tracking-widest">Simple Pricing</span>
-          </div>
-          <h2 id="pricing-heading" className="font-mono font-bold text-4xl md:text-5xl text-oceanic leading-tight">
+      <div style={{ position: "relative", zIndex: 1, maxWidth: 1280, margin: "0 auto", padding: "0 24px" }}>
+
+        {/* Header — no pill */}
+        <div style={{ marginBottom: 48, maxWidth: 560 }}>
+          <p className="font-mono" style={{ fontSize: 11, color: "rgba(255,200,1,0.65)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 16 }}>
+            Simple Pricing
+          </p>
+          <h2 id="pricing-heading" className="font-mono"
+            style={{ fontWeight: 700, fontSize: "clamp(30px, 4vw, 50px)", lineHeight: 1.1, letterSpacing: "-0.02em", color: "#F1F6F4" }}>
             Transparent. Scalable.<br />No surprises.
           </h2>
-          <p className="font-sans text-oceanic/55 mt-4 leading-relaxed">
+          <p className="font-sans" style={{ fontSize: 15, color: "rgba(241,246,244,0.48)", marginTop: 14, lineHeight: 1.65 }}>
             Start free, scale as you grow. Every plan includes a 14-day trial — no card required.
           </p>
         </div>
 
-        {/* Controls */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-14">
-          <BillingToggle value={billingCycle} onChange={handleBilling} />
-          <CurrencySwitcher value={currency} onChange={handleCurrency} />
+        {/* Controls row */}
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12, marginBottom: 40 }}>
+          {/* Billing toggle — segmented control, no pill shape */}
+          <div role="group" aria-label="Billing cycle" style={{
+            display: "inline-flex", background: "rgba(255,255,255,0.04)",
+            border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, padding: 4, gap: 2,
+          }}>
+            {(["monthly", "annual"] as const).map((cycle) => (
+              <button key={cycle} onClick={() => handleBilling(cycle)} aria-pressed={billingCycle === cycle}
+                style={{
+                  padding: "8px 18px", borderRadius: 7, border: "none", cursor: "pointer",
+                  fontFamily: '"Inter", sans-serif', fontSize: 13, fontWeight: billingCycle === cycle ? 600 : 400,
+                  background: billingCycle === cycle ? "#FFC801" : "transparent",
+                  color: billingCycle === cycle ? "#172B36" : "rgba(241,246,244,0.45)",
+                  transition: "background 200ms, color 200ms",
+                  display: "flex", alignItems: "center", gap: 8, minHeight: 38,
+                }}>
+                {cycle === "monthly" ? "Monthly" : "Annual"}
+                {cycle === "annual" && billingCycle === "annual" && (
+                  <span className="font-mono animate-badge-in"
+                    style={{ fontSize: 9, background: "rgba(23,43,54,0.8)", color: "#FFC801", padding: "2px 6px", borderRadius: 4, fontWeight: 700, letterSpacing: "0.04em" }}>
+                    −20%
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* Currency selector */}
+          <div style={{ position: "relative" }}>
+            <select
+              aria-label="Select currency" value={currency} onChange={(e) => handleCurrency(e.target.value as Currency)}
+              style={{
+                appearance: "none", WebkitAppearance: "none",
+                background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+                color: "#F1F6F4", fontFamily: '"JetBrains Mono", monospace', fontSize: 12,
+                padding: "9px 36px 9px 14px", borderRadius: 8, cursor: "pointer",
+                outline: "none", transition: "border-color 150ms", minHeight: 38,
+              }}
+              onFocus={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,200,1,0.5)"; }}
+              onBlur={(e)  => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)"; }}
+            >
+              <option value="INR">₹ INR</option>
+              <option value="USD">$ USD</option>
+              <option value="EUR">€ EUR</option>
+            </select>
+            <div style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}>
+              <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
+                <path d="M1 1L5 5L9 1" stroke="#FFC801" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+          </div>
         </div>
 
-        {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto">
+        {/* Cards grid — JS responsive */}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: desktop ? "repeat(3, 1fr)" : "1fr",
+          gap: 14, maxWidth: desktop ? "none" : 480,
+        }}>
           {PRICING_TIERS.map((t) => (
-            <PricingCard
-              key={t.id}
-              tierId={t.id}
+            <PricingCard key={t.id} tierId={t.id}
               priceRef={priceRefs[t.id as keyof typeof priceRefs]}
               periodRef={periodRefs[t.id as keyof typeof periodRefs]}
             />
           ))}
         </div>
 
-        <p className="font-sans text-oceanic/35 text-center text-xs mt-10">
+        <p className="font-sans" style={{ fontSize: 12, color: "rgba(241,246,244,0.28)", marginTop: 24, textAlign: "center" }}>
           All prices exclude applicable taxes. Enterprise plans available with custom invoicing.
         </p>
       </div>
