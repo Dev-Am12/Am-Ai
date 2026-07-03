@@ -12,10 +12,19 @@ export default function HeroSection() {
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(145deg, #172B36 0%, #0e2230 45%, #091820 100%)" }} />
         {/* Dot grid */}
         <div style={{ position: "absolute", inset: 0, opacity: 0.038, backgroundImage: "radial-gradient(circle, rgba(241,246,244,0.85) 1px, transparent 1px)", backgroundSize: "44px 44px" }} />
-        {/* Glow orbs */}
-        <div className="hero-glow-1" style={{ position: "absolute", top: -80, left: -100, width: 600, height: 600, borderRadius: "50%", filter: "blur(80px)", background: "radial-gradient(circle, rgba(255,200,1,0.1) 0%, transparent 65%)" }} />
-        <div className="hero-glow-2" style={{ position: "absolute", top: "15%", right: -80, width: 500, height: 500, borderRadius: "50%", filter: "blur(90px)", background: "radial-gradient(circle, rgba(17,76,90,0.75) 0%, transparent 65%)" }} />
-        <div className="hero-glow-3" style={{ position: "absolute", bottom: "10%", left: "30%", width: 420, height: 420, borderRadius: "50%", filter: "blur(70px)", background: "radial-gradient(circle, rgba(255,153,50,0.06) 0%, transparent 65%)" }} />
+
+        {/* Glow layer — back */}
+        <div className="hero-glow-2" style={{ position: "absolute", top: "10%", right: -140, width: 620, height: 620, borderRadius: "50%", filter: "blur(110px)", background: "radial-gradient(circle, rgba(17,76,90,0.55) 0%, transparent 70%)" }} />
+        <div className="hero-glow-3" style={{ position: "absolute", bottom: "5%", left: "25%", width: 520, height: 520, borderRadius: "50%", filter: "blur(100px)", background: "radial-gradient(circle, rgba(255,153,50,0.045) 0%, transparent 70%)" }} />
+
+        {/* Glow layer — mid */}
+        <div className="hero-glow-1" style={{ position: "absolute", top: -60, left: -80, width: 460, height: 460, borderRadius: "50%", filter: "blur(70px)", background: "radial-gradient(circle, rgba(255,200,1,0.09) 0%, transparent 65%)" }} />
+
+        {/* Glow layer — front */}
+        <div style={{ position: "absolute", top: "8%", left: "50%", transform: "translateX(-50%)", width: 480, height: 280, borderRadius: "50%", filter: "blur(50px)", background: "radial-gradient(circle, rgba(255,200,1,0.06) 0%, transparent 70%)" }} />
+
+        {/* Grain */}
+        <div className="grain-overlay" />
       </div>
 
       {/* ── Main content ── */}
@@ -27,17 +36,8 @@ export default function HeroSection() {
         maxWidth: 1280, margin: "0 auto", width: "100%",
       }}>
 
-        {/* Eyebrow — plain text, no pill */}
-        <p className="font-mono" style={{
-          fontSize: 11, color: "rgba(255,200,1,0.55)",
-          letterSpacing: "0.14em", textTransform: "uppercase",
-          marginBottom: 22, animation: "fadeSlideUp 0.5s ease-out 0ms both",
-        }}>
-          v2.0 — Real-Time AI Pipelines
-        </p>
-
         {/* Headline */}
-        <h1 id="hero-heading" className="font-mono" style={{
+        <h1 id="hero-heading" className="hero-headline" style={{
           fontWeight: 700, fontSize: "clamp(40px, 7.5vw, 88px)",
           lineHeight: 1.04, letterSpacing: "-0.03em", maxWidth: 860, marginBottom: 0,
         }}>
@@ -50,7 +50,7 @@ export default function HeroSection() {
         </h1>
 
         {/* Sub copy */}
-        <p className="font-sans" style={{
+        <p className="hero-subhead" style={{
           fontSize: "clamp(15px, 1.6vw, 18px)", lineHeight: 1.7,
           color: "rgba(241,246,244,0.5)", maxWidth: 510, marginTop: 22,
           animation: "fadeSlideUp 0.6s ease-out 260ms both",
@@ -72,8 +72,8 @@ export default function HeroSection() {
             boxShadow: "0 4px 28px rgba(255,200,1,0.3)",
             textDecoration: "none", transition: "background 150ms, transform 150ms, box-shadow 150ms",
           }}
-          onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.background = "#FF9932"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 36px rgba(255,153,50,0.35)"; }}
-          onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.background = "#FFC801"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 28px rgba(255,200,1,0.3)"; }}
+            onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.background = "#FF9932"; el.style.transform = "translateY(-1px)"; el.style.boxShadow = "0 8px 36px rgba(255,153,50,0.35)"; }}
+            onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.background = "#FFC801"; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 4px 28px rgba(255,200,1,0.3)"; }}
           >
             Start building free
             <Icon name="arrow-trending-up" size={15} strokeColor="#172B36" />
@@ -86,8 +86,8 @@ export default function HeroSection() {
             textDecoration: "none", background: "transparent",
             transition: "border-color 150ms, color 150ms, background 150ms, transform 150ms",
           }}
-          onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "rgba(241,246,244,0.32)"; el.style.color = "#F1F6F4"; el.style.background = "rgba(255,255,255,0.05)"; el.style.transform = "translateY(-1px)"; }}
-          onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "rgba(241,246,244,0.16)"; el.style.color = "rgba(241,246,244,0.68)"; el.style.background = "transparent"; el.style.transform = "translateY(0)"; }}
+            onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "rgba(241,246,244,0.32)"; el.style.color = "#F1F6F4"; el.style.background = "rgba(255,255,255,0.05)"; el.style.transform = "translateY(-1px)"; }}
+            onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "rgba(241,246,244,0.16)"; el.style.color = "rgba(241,246,244,0.68)"; el.style.background = "transparent"; el.style.transform = "translateY(0)"; }}
           >
             See how it works
             <Icon name="chevron-right" size={14} strokeColor="currentColor" />
@@ -105,10 +105,10 @@ export default function HeroSection() {
             WebkitMaskImage: "linear-gradient(90deg, transparent, black 12%, black 88%, transparent)",
           }}>
             <div className="animate-ticker ticker-track" style={{ display: "flex", gap: 52, alignItems: "center", whiteSpace: "nowrap", width: "max-content" }}>
-              {["Anthropic","Vercel","Linear","Notion","Figma","Stripe","Raycast","Framer",
-                "Anthropic","Vercel","Linear","Notion","Figma","Stripe","Raycast","Framer"].map((name, i) => (
-                <span key={i} className="font-mono" style={{ fontSize: 12, fontWeight: 600, color: "rgba(241,246,244,0.17)", flexShrink: 0 }}>{name}</span>
-              ))}
+              {["Anthropic", "Vercel", "Linear", "Notion", "Figma", "Stripe", "Raycast", "Framer",
+                "Anthropic", "Vercel", "Linear", "Notion", "Figma", "Stripe", "Raycast", "Framer"].map((name, i) => (
+                  <span key={i} className="font-mono" style={{ fontSize: 12, fontWeight: 600, color: "rgba(241,246,244,0.17)", flexShrink: 0 }}>{name}</span>
+                ))}
             </div>
           </div>
         </div>
@@ -132,8 +132,8 @@ export default function HeroSection() {
         textDecoration: "none", transition: "color 200ms",
         animation: "fadeSlideUp 0.5s ease-out 800ms both",
       }}
-      onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(241,246,244,0.45)"; }}
-      onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(241,246,244,0.18)"; }}
+        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(241,246,244,0.45)"; }}
+        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "rgba(241,246,244,0.18)"; }}
       >
         <span className="font-mono" style={{ fontSize: 9, letterSpacing: "0.16em", textTransform: "uppercase" }}>Scroll</span>
         <Icon name="chevron-down" size={15} strokeColor="currentColor" />

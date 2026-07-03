@@ -20,16 +20,17 @@ export default function Navbar() {
 
   const navStyle: React.CSSProperties = {
     position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
-    transition: "background 300ms, border-color 300ms, backdrop-filter 300ms",
-    background: scrolled ? "rgba(23,43,54,0.94)" : "transparent",
-    backdropFilter: scrolled ? "blur(20px)" : "none",
-    WebkitBackdropFilter: scrolled ? "blur(20px)" : "none",
-    borderBottom: scrolled ? "1px solid rgba(255,255,255,0.06)" : "1px solid transparent",
+    transition: "background 300ms ease-out, border-color 300ms ease-out, backdrop-filter 300ms ease-out, box-shadow 300ms ease-out",
+    background: scrolled ? "rgba(23,43,54,0.82)" : "transparent",
+    backdropFilter: scrolled ? "blur(28px) saturate(160%)" : "none",
+    WebkitBackdropFilter: scrolled ? "blur(28px) saturate(160%)" : "none",
+    borderBottom: scrolled ? "1px solid rgba(255,255,255,0.08)" : "1px solid transparent",
+    boxShadow: scrolled ? "0 8px 32px rgba(0,0,0,0.28)" : "0 0 0 rgba(0,0,0,0)",
   };
 
   return (
     <header style={navStyle}>
-      <nav style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", height: 64, display: "flex", alignItems: "center", justifyContent: "space-between" }} aria-label="Main navigation">
+      <nav style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", height: scrolled ? 56:64, transition: "height 300ms ease-out", display: "flex", alignItems: "center", justifyContent: "space-between" }} aria-label="Main navigation">
         {/* Logo */}
         <a href="#hero" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }} aria-label="AmAi home">
           <Icon name="amai-logo" size={30} strokeColor="#FFC801" />
@@ -62,8 +63,8 @@ export default function Navbar() {
             boxShadow: "0 2px 12px rgba(255,200,1,0.22)",
             transition: "background 150ms",
           }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#FF9932"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "#FFC801"; }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#FF9932"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "#FFC801"; }}
           >
             Get Started <Icon name="chevron-right" size={13} strokeColor="#172B36" />
           </a>
@@ -80,10 +81,10 @@ export default function Navbar() {
           {menuOpen
             ? <Icon name="x-mark" size={22} strokeColor="#F1F6F4" />
             : <div style={{ display: "flex", flexDirection: "column", gap: 5, width: 20 }}>
-                <span style={{ height: 1.5, background: "rgba(241,246,244,0.7)", borderRadius: 2, display: "block" }} />
-                <span style={{ height: 1.5, background: "rgba(241,246,244,0.7)", borderRadius: 2, display: "block", width: "75%" }} />
-                <span style={{ height: 1.5, background: "rgba(241,246,244,0.7)", borderRadius: 2, display: "block" }} />
-              </div>
+              <span style={{ height: 1.5, background: "rgba(241,246,244,0.7)", borderRadius: 2, display: "block" }} />
+              <span style={{ height: 1.5, background: "rgba(241,246,244,0.7)", borderRadius: 2, display: "block", width: "75%" }} />
+              <span style={{ height: 1.5, background: "rgba(241,246,244,0.7)", borderRadius: 2, display: "block" }} />
+            </div>
           }
         </button>
       </nav>

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useLayoutEffect } from "react";
 import { PRICING_TIERS, computePrice, type Currency, type BillingCycle } from "@/lib/pricingConfig";
 import PricingCard from "./PricingCard";
 
@@ -7,6 +7,27 @@ export default function PricingSection() {
   const [currency, setCurrency]       = useState<Currency>("INR");
   const [billingCycle, setBillingCycle] = useState<BillingCycle>("monthly");
   const [desktop, setDesktop]          = useState(false);
+  const [indicator, setIndicator]      = useState({ left: 0, width: 0 });
+
+  const toggleGroupRef = useRef<HTMLDivElement>(null);
+  const btnRefs = { monthly: useRef<HTMLButtonElement>(null), annual: useRef<HTMLButtonElement>(null) };
+
+  const measureIndicator = useCallback(() => {
+    const activeBtn = btnRefs[billingCycle].current;
+    const group = toggleGroupRef.current;
+    if (!activeBtn || !group) return;
+    const groupRect = group.getBoundingClientRect();
+    const btnRect = activeBtn.getBoundingClientRect();
+    setIndicator({ left: btnRect.left - groupRect.left, width: btnRect.width });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [billingCycle]);
+
+  useLayoutEffect(() => { measureIndicator(); }, [measureIndicator, billingCycle]);
+
+  useEffect(() => {
+    window.addEventListener("resize", measureIndicator);
+    return () => window.removeEventListener("resize", measureIndicator);
+  }, [measureIndicator]);
 
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
@@ -30,19 +51,17 @@ export default function PricingSection() {
 
   useEffect(() => { updatePrices("INR", "monthly"); }, [updatePrices]);
 
-  const handleCurrency = (cur: Currency)       => { setCurrency(cur);       updatePrices(cur, billingCycle); };
-  const handleBilling  = (cyc: BillingCycle)   => { setBillingCycle(cyc);   updatePrices(currency, cyc); };
+  const handleCurrency = (cur: Currency)     => { setCurrency(cur);     updatePrices(cur, billingCycle); };
+  const handleBilling  = (cyc: BillingCycle) => { setBillingCycle(cyc); updatePrices(currency, cyc); };
 
   return (
     <section id="pricing" aria-labelledby="pricing-heading"
       style={{ position: "relative", padding: "108px 0", overflow: "hidden" }}>
-      {/* Keep dark theme for pricing — no light section flip */}
       <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, #0f2028 0%, #172B36 100%)" }} />
       <div style={{ position: "absolute", inset: 0, opacity: 0.025, backgroundImage: "radial-gradient(circle, rgba(241,246,244,0.7) 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
 
       <div style={{ position: "relative", zIndex: 1, maxWidth: 1280, margin: "0 auto", padding: "0 24px" }}>
 
-        {/* Header — no pill */}
         <div style={{ marginBottom: 48, maxWidth: 560 }}>
           <p className="font-mono" style={{ fontSize: 11, color: "rgba(255,200,1,0.65)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 16 }}>
             Simple Pricing
@@ -56,21 +75,31 @@ export default function PricingSection() {
           </p>
         </div>
 
-        {/* Controls row */}
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12, marginBottom: 40 }}>
-          {/* Billing toggle — segmented control, no pill shape */}
-          <div role="group" aria-label="Billing cycle" style={{
+          {/* Billing toggle sliding indicator */}
+          <div ref={toggleGroupRef} role="group" aria-label="Billing cycle" style={{
+            position: "relative",
             display: "inline-flex", background: "rgba(255,255,255,0.04)",
             border: "1px solid rgba(255,255,255,0.1)", borderRadius: 10, padding: 4, gap: 2,
           }}>
+            {/* Sliding indicator behind button labels*/}
+            <div aria-hidden="true" style={{
+              position: "absolute", top: 4, bottom: 4,
+              left: indicator.left, width: indicator.width,
+              background: "#FFC801", borderRadius: 7,
+              transition: "left 260ms cubic-bezier(0.4, 0, 0.2, 1), width 260ms cubic-bezier(0.4, 0, 0.2, 1)",
+              zIndex: 0,
+            }} />
+
             {(["monthly", "annual"] as const).map((cycle) => (
-              <button key={cycle} onClick={() => handleBilling(cycle)} aria-pressed={billingCycle === cycle}
+              <button key={cycle} ref={btnRefs[cycle]} onClick={() => handleBilling(cycle)} aria-pressed={billingCycle === cycle}
                 style={{
+                  position: "relative", zIndex: 1,
                   padding: "8px 18px", borderRadius: 7, border: "none", cursor: "pointer",
                   fontFamily: '"Inter", sans-serif', fontSize: 13, fontWeight: billingCycle === cycle ? 600 : 400,
-                  background: billingCycle === cycle ? "#FFC801" : "transparent",
+                  background: "transparent",
                   color: billingCycle === cycle ? "#172B36" : "rgba(241,246,244,0.45)",
-                  transition: "background 200ms, color 200ms",
+                  transition: "color 200ms",
                   display: "flex", alignItems: "center", gap: 8, minHeight: 38,
                 }}>
                 {cycle === "monthly" ? "Monthly" : "Annual"}
@@ -110,7 +139,6 @@ export default function PricingSection() {
           </div>
         </div>
 
-        {/* Cards grid — JS responsive */}
         <div style={{
           display: "grid",
           gridTemplateColumns: desktop ? "repeat(3, 1fr)" : "1fr",
